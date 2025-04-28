@@ -17,7 +17,6 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Middleware to verify Kratos session
 const verifySession = async (req, res, next) => {
   try {
     const session = await kratos.toSession(undefined, req.headers.cookie)
@@ -28,7 +27,6 @@ const verifySession = async (req, res, next) => {
   }
 }
 
-// Auth routes
 app.get('/auth/registration', async (req, res) => {
   try {
     const flow = await kratos.initializeSelfServiceRegistrationFlowForBrowsers()
@@ -60,10 +58,8 @@ auth.get('/auth/callback', async (req, res) => {
   
 })
 
-// Public route
 app.get('/', (req, res) => { res.json({ message: 'Welcome to the API' }) })
 
-// Protected route example
 app.get('/protected', verifySession, (req, res) => {
   res.json({
     message: 'This is a protected endpoint',
