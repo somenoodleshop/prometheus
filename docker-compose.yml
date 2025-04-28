@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  kratos-db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=kratos
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=kratos
+    ports:
+      - '5432:5432'
+    volumes:
+      - type: volume
+        source: kratos-db
+        target: /var/lib/postgresql/data
+    networks:
+      - intranet
+
+  kratos:
+    depends_on:
+      - kratos-db
+    image: oryd/kratos:v1.0.0
+    ports:
+      - '4433:4433' # public/admin
+      - '4434:4434' # public
+    restart: unless-stopped
+    environment:
+      - DSN=postgres://kratos:secret@kratos-db:5432/kratos?sslmode=disable
+      - LOG_LEVEL=trace
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    volumes:
+      - type: bind
+        source: ./config/kratos
+        target: /etc/config/kratos
+    networks:
+      - intranet
+
+networks:
+  intranet:
+
+volumes:
+  kratos-db: 
