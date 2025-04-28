@@ -15,14 +15,24 @@ services:
         target: /var/lib/postgresql/data
     networks:
       - intranet
-
+  kratos-selfservice-ui-node:
+    image: oryd/kratos-selfservice-ui-node:v1.3.1
+    environment:
+      - KRATOS_PUBLIC_URL=http://kratos:4433/
+      - KRATOS_BROWSER_URL=http://127.0.0.1:4433/
+      - COOKIE_SECRET=changeme
+      - CSRF_COOKIE_NAME=ory_csrf_ui
+      - CSRF_COOKIE_SECRET=changeme
+    networks:
+      - intranet
+    restart: on-failure
   kratos:
     depends_on:
       - kratos-db
-    image: oryd/kratos:v1.0.0
+    image: oryd/kratos:v1.3.1
     ports:
-      - '4433:4433' # public/admin
-      - '4434:4434' # public
+      - '4433:4433' # public
+      - '4434:4434' # admin
     restart: unless-stopped
     environment:
       - DSN=postgres://kratos:secret@kratos-db:5432/kratos?sslmode=disable
