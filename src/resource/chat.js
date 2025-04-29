@@ -10,7 +10,7 @@ export const verifyToken = async (req, res, next) =>
 const sendMessage = async (req, res, next) =>
   !req.body.messages
     ? next({ status: 400, message: 'Messages are required' })
-    : openai.query(req.body.token, req.body.messages)
+    : openai[req.body.messages.length > 1 ? 'query' : 'newSession'](req.body.token, req.body.messages)
         .then(({ message }) => res.json({ response: message.content }))
         .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
