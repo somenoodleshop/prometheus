@@ -2,8 +2,9 @@ import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 
-import resources from './resource.js'
+import resources from './resource/index.js'
 import router from './util/router.js'
+import { verifySession } from './resource/auth.js'
 
 const { PORT = 8080 } = process.env
 

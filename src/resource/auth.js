@@ -7,7 +7,7 @@ const {
 
 const kratos = new FrontendApi(new Configuration({ basePath: KRATOS_PUBLIC_URL }))
 
-const verifySession = async (req, res, next) =>
+export const verifySession = async (req, res, next) =>
   kratos.toSession(undefined, req.headers.cookie)
     .then(session => {
       req.session = session
