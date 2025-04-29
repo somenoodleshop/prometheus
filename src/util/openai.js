@@ -23,7 +23,7 @@ export default {
     }
   },
   newSession: async (token, query) => {
-    const systemPrompt = `${defaultSystemPrompt} Respond to the user's input and also provided a suitable title for the conversation.`
+    const systemPrompt = `${defaultSystemPrompt} Respond to the user's input and also provide a suitable title for the conversation.`
     const payload = [{ role: 'system', content: systemPrompt }, ...query]
     const { choices = [] } = await request.post(url, { ...body('gpt-4o', payload), response_format: newSession }, authorization(token))
     const [{ message = '' }] = choices
