@@ -91,6 +91,9 @@ selfservice:
       lifespan: 10m
       ui_url: http://127.0.0.1:4455/registration
       after:
+        oidc:
+          hooks:
+            - hook: session
         password:
           hooks:
             - hook: session
