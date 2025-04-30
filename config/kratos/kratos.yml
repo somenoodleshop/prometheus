@@ -28,7 +28,27 @@ selfservice:
       enabled: true
     code:
       enabled: true
-    
+    oidc:
+      enabled: true
+      config:
+        providers:
+          - id: google
+            provider: google
+            client_id: ${GOOGLE_CLIENT_ID}
+            client_secret: ${GOOGLE_CLIENT_SECRET}
+            mapper_url: file:///etc/config/kratos/google.jsonnet
+            scope:
+              - email
+              - profile
+          - id: apple
+            provider: apple
+            client_id: ${APPLE_CLIENT_ID}
+            client_secret: ${APPLE_CLIENT_SECRET}
+            mapper_url: file:///etc/config/kratos/apple.jsonnet
+            scope:
+              - email
+              - name
+
   flows:
     error:
       ui_url: http://127.0.0.1:4455/error
