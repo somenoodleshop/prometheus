@@ -7,7 +7,7 @@ const {
 
 const kratos = new FrontendApi(new Configuration({ basePath: KRATOS_PUBLIC_URL }))
 
-export const verifySession = async (req, res, next) =>
+export const verifySession = (req, res, next) =>
   kratos.toSession(undefined, req.headers.cookie)
     .then(session => {
       req.session = session
@@ -15,17 +15,17 @@ export const verifySession = async (req, res, next) =>
     })
     .catch(next({ status: 401, message: 'Unauthorized' }))
 
-const registration = async (req, res, next) =>
+const registration = (req, res, next) =>
   kratos.initializeSelfServiceRegistrationFlowForBrowsers()
     .then(flow => res.json(flow))
     .catch(next({ status: 500, message: 'Failed to initialize registration' }))
 
-const login = async (req, res, next) =>
+const login = (req, res, next) =>
   kratos.initializeSelfServiceLoginFlowForBrowsers()
     .then(flow => res.json(flow))
     .catch(next({ status: 500, message: 'Failed to initialize login' }))
 
-const logout = async (req, res, next) =>
+const logout = (req, res, next) =>
   kratos.createSelfServiceLogoutFlowUrlForBrowsers(req.headers.cookie)
     .then(flow => res.json(flow.data))
     .catch(next({ status: 500, message: 'Failed to logout' }))
