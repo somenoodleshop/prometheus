@@ -1,13 +1,13 @@
 import openai from '../util/openai.js'
 
-export const verifyToken = async (req, res, next) =>
+export const verifyToken = (req, res, next) =>
   !req.body.token
     ? next({ status: 400, message: 'Token is required' })
     : openai.isValidToken(req.body.token)
         .then(isValid => isValid ? next() : next({ status: 401, message: 'Invalid token' }))
         .catch(() => next({ status: 500, message: 'Failed to validate token' }))
 
-const sendMessage = async (req, res, next) =>
+const sendMessage = (req, res, next) =>
   !req.body.messages
     ? next({ status: 400, message: 'Messages are required' })
     : openai[req.body.messages.length > 1 ? 'query' : 'newSession'](req.body.token, req.body.messages)
