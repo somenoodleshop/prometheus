@@ -1,5 +1,6 @@
-import express from 'express'
 import cors from 'cors'
+import express from 'express'
+import healthcheck from 'express-healthcheck'
 import helmet from 'helmet'
 
 import resources from './resource/index.js'
@@ -14,6 +15,8 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use('/health', healthcheck())
 
 app.get('/', (req, res) => { res.json({ message: 'Welcome to the API' }) })
 
