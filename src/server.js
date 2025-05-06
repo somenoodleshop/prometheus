@@ -6,6 +6,7 @@ import pino from 'pino-http'
 
 import resources from './resource/index.js'
 import router from './util/router.js'
+import stackTraceMask from './util/stackTraceMask.js'
 import { verifySession } from './resource/auth.js'
 
 const { PORT = 8080 } = process.env
@@ -41,6 +42,8 @@ app.get('/profile', verifySession, async (req, res) => {
 
 resources.forEach(router(app))
 
-app.use((req, res) => { res.status(404).json({ message: 'Not Found' }) })
+app.use((req, res, next) => next({ status: 404 }))
+
+app.use(stackTraceMask)
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
