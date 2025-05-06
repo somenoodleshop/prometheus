@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import healthcheck from 'express-healthcheck'
 import helmet from 'helmet'
+import pino from 'pino-http'
 
 import resources from './resource/index.js'
 import router from './util/router.js'
@@ -15,6 +16,7 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(pino())
 
 app.use('/health', healthcheck())
 
