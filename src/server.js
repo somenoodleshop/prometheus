@@ -9,7 +9,7 @@ import router from './util/router.js'
 import stackTraceMask from './util/stackTraceMask.js'
 import { verifySession } from './resource/auth.js'
 
-const { PORT = 8080 } = process.env
+const { PORT = 80 } = process.env
 
 const app = express()
 
