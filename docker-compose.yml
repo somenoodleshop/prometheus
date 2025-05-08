@@ -1,6 +1,24 @@
 version: '3.7'
 
 services:
+  traefik:
+    image: traefik
+    command:
+      - '--log.level=DEBUG'
+      - '--api.dashboard=true'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - intranet
   kratos-migrate:
     image: oryd/kratos:v1.3.1
     environment:
@@ -24,6 +42,18 @@ services:
       - POSTGRES_USER=kratos
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=kratos
+    networks:
+      - intranet
+  prometheus:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - '80:80'
+      - '8080:8080'
     networks:
       - intranet
   kratos-selfservice-ui-node:
