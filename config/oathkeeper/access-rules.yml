@@ -1,0 +1,12 @@
+- id: prometheus
+  upstream:
+    url: http://prometheus:80
+    preserve_host: true
+  match:
+    url: http://prometheus.intranet/**
+  authenticators:
+    - handler: cookie_session
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: id_token
