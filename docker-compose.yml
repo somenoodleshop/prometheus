@@ -20,7 +20,7 @@ services:
     networks:
       - intranet
   oathkeeper:
-    image: oryd/oathkeeper:v0.42.1
+    image: oryd/oathkeeper:v0.40.9
     command: serve -c /etc/config/oathkeeper/oathkeeper.yml
     ports:
       - '4455:4455'
