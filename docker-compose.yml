@@ -25,7 +25,7 @@ services:
     ports:
       - '4455:4455'
       - '4456:4456'
-    env_file:
+    environment:
       - LOG_LEVEL=debug
     volumes:
       - type: bind
