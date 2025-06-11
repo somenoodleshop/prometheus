@@ -3,6 +3,8 @@ import OpenAI from 'openai'
 import request from './request.js'
 import { newSession } from './responseFormat.js'
 
+const { OPENAI_TOKEN } = process.env
+
 const url = 'https://api.openai.com/v1/chat/completions'
 
 const defaultSystemPrompt = 'You are ChatGPT, a large language model trained by OpenAI.'
@@ -39,5 +41,17 @@ export default {
       const [{ message = '' }] = choices
       return { message }
     })
-    .catch(() => alert('Request broken'))
+    .catch(() => alert('Request broken')),
+  stream: async messages => {
+    const client = new OpenAI({ apiKey: OPENAI_TOKEN })
+    const stream = await client.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
+        { role: 'system', content: defaultSystemPrompt },
+        ...messages
+      ],
+      stream: true
+    })
+    return stream
+  }
 }
