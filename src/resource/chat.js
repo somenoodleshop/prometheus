@@ -14,9 +14,30 @@ const sendMessage = (req, res, next) =>
         .then(({ message }) => res.json({ response: message.content }))
         .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
+const streamMessage = async (req, res, next) => {
+  if (!req.body.m) {
+    return next({ status: 400, message: 'Messages are required' })
+  }
+
+  const { messages } = req.body
+
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Connection', 'keep-alive')
+  res.flushHeaders()
+
+  const stream = await openai.stream(messages)
+  for await (const part of stream) {
+    res.write(part.choices[0]?.text || '')
+  }
+
+  res.end()
+}
+
 export default [{
   resource: '/chat',
   behaviors: [
-    { endpoint: '/send', method: 'post', behavior: [verifyToken, sendMessage] }
+    { endpoint: '/send', method: 'post', behavior: [verifyToken, sendMessage] },
+    { endpoint: '/stream', method: 'post', behavior: [streamMessage] }
   ]
 }]
