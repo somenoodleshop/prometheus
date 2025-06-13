@@ -45,7 +45,7 @@ export default {
   stream: async messages => {
     const client = new OpenAI({ apiKey: OPENAI_TOKEN })
     const stream = await client.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4.5-preview',
       messages: [
         { role: 'system', content: defaultSystemPrompt },
         ...messages
