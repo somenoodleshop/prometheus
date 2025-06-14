@@ -7,14 +7,14 @@ export const verifyToken = (req, res, next) =>
         .then(isValid => isValid ? next() : next({ status: 401, message: 'Invalid token' }))
         .catch(() => next({ status: 500, message: 'Failed to validate token' }))
 
-const sendMessage = (req, res, next) =>
+const query = (req, res, next) =>
   !req.body.messages
     ? next({ status: 400, message: 'Messages are required' })
-    : openai[req.body.messages.length > 1 ? 'query' : 'newSession'](req.body.token, req.body.messages)
+    : openai[req.body.messages.length > 1 ? 'query' : 'session'](req.body.messages)
         .then(({ message }) => res.json({ response: message.content }))
         .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
-const streamMessage = async (req, res, next) => {
+const stream = async (req, res, next) => {
   if (!req.body.messages) {
     return next({ status: 400, message: 'Messages are required' })
   }
@@ -37,7 +37,7 @@ const streamMessage = async (req, res, next) => {
 export default [{
   resource: '/chat',
   behaviors: [
-    { endpoint: '/send', method: 'post', behavior: [verifyToken, sendMessage] },
-    { endpoint: '/stream', method: 'post', behavior: streamMessage }
+    { endpoint: '/', method: 'post', behavior: query },
+    { endpoint: '/stream', method: 'post', behavior: stream }
   ]
 }]

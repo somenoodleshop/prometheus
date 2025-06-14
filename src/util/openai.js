@@ -24,20 +24,21 @@ export default {
       return false
     }
   },
-  newSession: async (token, query) => {
+  session: query => {
     const systemPrompt = `${defaultSystemPrompt} Respond to the user's input and also provide a suitable title for the conversation.`
     const payload = [{ role: 'system', content: systemPrompt }, ...query]
-    const { choices = [] } = await request.post(url, { ...body('gpt-4o', payload), response_format: newSession }, authorization(token))
-    const [{ message = '' }] = choices
-    const content = JSON.parse(message.content)
-    return {
-      title: content.title,
-      message: { role: message.role, content: content.response }
-    }
+    return request.post(url, { ...body('gpt-4o', payload), response_format: newSession }, authorization(OPENAI_TOKEN))
+      .then(({ choices = [] }) => {
+        const [{ message = '' }] = choices
+        const content = JSON.parse(message.content)
+        return {
+          title: content.title,
+          message: { role: message.role, content: content.response }
+        }
+      })
   },
-  query: (token, messages) => !token ? alert('No API key added') : request.post(url, body('gpt-4o', [{ role: 'system', content: defaultSystemPrompt }, ...messages]), authorization(token))
-    .then(data => {
-      const { choices = [] } = data
+  query: messages => request.post(url, body('gpt-4o', [{ role: 'system', content: defaultSystemPrompt }, ...messages]), authorization(OPENAI_TOKEN))
+    .then(({ choices = [] }) => {
       const [{ message = '' }] = choices
       return { message }
     })
