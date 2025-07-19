@@ -8,12 +8,18 @@ export const verifyToken = (req, res, next) =>
         .then(isValid => isValid ? next() : next({ status: 401, message: 'Invalid token' }))
         .catch(() => next({ status: 500, message: 'Failed to validate token' }))
 
-const query = (req, res, next) =>
-  !req.body.messages
+const query = ({ body: { messages, provider } }, res, next) =>
+  !messages
     ? next({ status: 400, message: 'Messages are required' })
-    : openai[req.body.messages.length > 1 ? 'query' : 'session'](req.body.messages)
-        .then(({ message }) => res.json({ response: message.content }))
-        .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
+    : provider === 'openai'
+      ? openai[messages.length > 1 ? 'query' : 'session'](messages)
+          .then(({ message }) => res.json({ response: message.content }))
+          .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
+      : provider === 'anthropic'
+        ? anthropic.query(messages)
+            .then(({ message }) => res.json({ response: message.content }))
+            .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
+        : next({ status: 400, message: 'Invalid provider' })
 
 const stream = async (req, res, next) => {
   if (!req.body.messages) {
