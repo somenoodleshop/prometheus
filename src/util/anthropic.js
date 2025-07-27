@@ -8,7 +8,10 @@ const defaultSystemPrompt = 'You are Claude, an AI assistant created by Anthropi
 
 export default {
   query: async messages => {
-    const response = await client.messages.create({ model: 'claude-opus-4-0', messages })
+    const response = await client.messages.create({
+      model: 'claude-opus-4-0',
+      messages: [{ role: 'system', content: defaultSystemPrompt }, ...messages]
+    })
     return response.content[0].text
   }
 }
