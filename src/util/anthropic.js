@@ -13,5 +13,6 @@ export default {
       messages: [{ role: 'system', content: defaultSystemPrompt }, ...messages]
     })
     return response.content[0].text
-  }
+  },
+  stream: async messages => {}
 }
