@@ -28,36 +28,6 @@ selfservice:
       enabled: true
     code:
       enabled: true
-    oidc:
-      enabled: true
-      config:
-        providers:
-          - id: github
-            provider: github
-            client_id: ${GITHUB_CLIENT_ID}
-            client_secret: ${GITHUB_CLIENT_SECRET}
-            mapper_url: "base64://${GITHUB_MAPPER_URL}"
-            scope:
-              - user:email
-          - id: google
-            provider: google
-            client_id: ${GOOGLE_CLIENT_ID}
-            client_secret: ${GOOGLE_CLIENT_SECRET}
-            mapper_url: "base64://${GOOGLE_MAPPER_URL}"
-            scope:
-              - email
-              - profile
-          - id: apple
-            provider: apple
-            client_id: ${APPLE_CLIENT_ID}
-            apple_team_id: ${APPLE_TEAM_ID}
-            apple_private_key_id: ${APPLE_PRIVATE_KEY_ID}
-            apple_private_key: ${APPLE_PRIVATE_KEY}
-            issuer_url: https://appleid.apple.com
-            mapper_url: "base64://${APPLE_MAPPER_URL}"
-            scope:
-              - email
-              - name
 
   flows:
     error:
