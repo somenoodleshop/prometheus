@@ -14,5 +14,6 @@ export default {
     })
     return response.content[0].text
   },
-  stream: async messages => {}
+  session: async (messages) => { throw new Error('Not implemented') },
+  stream: async messages => { throw new Error('Not implemented') }
 }

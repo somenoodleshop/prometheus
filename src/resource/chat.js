@@ -1,6 +1,8 @@
 import openai from '../util/openai.js'
 import anthropic from '../util/anthropic.js'
 
+const providers = { openai, anthropic }
+
 export const verifyToken = (req, res, next) =>
   !req.body.token
     ? next({ status: 400, message: 'Token is required' })
@@ -11,15 +13,11 @@ export const verifyToken = (req, res, next) =>
 const query = ({ body: { messages, provider } }, res, next) =>
   !messages
     ? next({ status: 400, message: 'Messages are required' })
-    : provider === 'openai'
-      ? openai[messages.length > 1 ? 'query' : 'session'](messages)
+    : !providers[provider]
+      ? next({ status: 400, message: 'Invalid provider' })
+      : providers[provider][messages.length > 1 ? 'query' : 'session'](messages)
           .then(({ message }) => res.json({ response: message.content }))
           .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
-      : provider === 'anthropic'
-        ? anthropic.query(messages)
-            .then(({ message }) => res.json({ response: message.content }))
-            .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
-        : next({ status: 400, message: 'Invalid provider' })
 
 const stream = async (req, res, next) => {
   if (!req.body.messages) {
