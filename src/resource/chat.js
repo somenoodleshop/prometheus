@@ -19,19 +19,18 @@ const query = ({ body: { messages, provider } }, res, next) =>
           .then(({ message }) => res.json({ response: message.content }))
           .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
-const stream = async (req, res, next) => {
-  if (!req.body.messages) {
+const stream = async ({ body: { messages, provider = 'openai' } }, res, next) => {
+  if (!messages) {
     return next({ status: 400, message: 'Messages are required' })
   }
-
-  const { messages } = req.body
 
   res.setHeader('Content-Type', 'text/event-stream')
   res.setHeader('Cache-Control', 'no-cache')
   res.setHeader('Connection', 'keep-alive')
   res.flushHeaders()
 
-  const stream = await openai.stream(messages)
+  const stream = await providers[provider].stream(messages)
+
   for await (const part of stream) {
     res.write(part.choices[0]?.delta?.content || '')
   }
