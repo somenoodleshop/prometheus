@@ -9,7 +9,7 @@ const url = 'https://api.openai.com/v1/chat/completions'
 
 const defaultSystemPrompt = 'You are ChatGPT, a large language model trained by OpenAI.'
 
-const defaultModel = 'gpt-5'
+const defaultModel = 'gpt-4o'
 
 const body = (model, messages) => ({ model, messages, temperature: 0.7 })
 const authorization = token => ({ Authorization: `Bearer ${token}` })
