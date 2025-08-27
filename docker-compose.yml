@@ -18,7 +18,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - 'traefik.http.middlewares.oathkeeper.forwardauth.address=http://oathkeeper:4456/decisions'
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=x-Id-Token,Authorization'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=X-ID-Token,X-User-ID,X-User,,Authorization'
     networks:
       - intranet
   oathkeeper:
@@ -78,9 +78,10 @@ services:
 
       - 'traefik.http.routers.prometheus.middlewares=oathkeeper'
 
-      - 'traefik.http.middlewares.oathkeeper-authenticator.forwardauth.address=http://oathkeeper:4456/decisions'
-      - 'traefik.http.middlewares.oathkeeper-authenticator.forwardauth.trustForwardHeader=true'
-      - 'traefik.http.middlewares.oathkeeper-authenticator.forwardauth.authResponseHeaders=X-User-ID,X-Session-Token'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.address=http://oathkeeper:4456/decisions'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.trustForwardHeader=true'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=X-User-ID,X-Forwarded-User,X-Session-Token,Authorization'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.authRequestHeaders=Cookie,Authorization'
     networks:
       - intranet
   kratos-selfservice-ui-node:
