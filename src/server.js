@@ -7,7 +7,6 @@ import pino from 'pino-http'
 import resources from './resource/index.js'
 import router from './util/router.js'
 import stackTraceMask from './util/stackTraceMask.js'
-import { verifySession } from './resource/auth.js'
 
 const { PORT = 80 } = process.env
 
@@ -23,22 +22,20 @@ app.use('/health', healthcheck())
 
 app.get('/', (req, res) => { res.json({ message: 'Welcome to the API' }) })
 
-app.get('/protected', verifySession, (req, res) => {
+app.get('/protected', (req, res) => {
+  const userID = req.headers.get('X-User-ID')
+  const sessionToken = req.headers.get('X-Session-Token')
+  if (!userID || !sessionToken) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
   res.json({
     message: 'This is a protected endpoint',
-    user: req.session.identity.traits
+    userID,
+    sessionToken
   })
 })
 
-app.get('/profile', verifySession, async (req, res) => {
-  res.json({
-    profile: req.session.identity.traits,
-    sessionInfo: {
-      authenticated_at: req.session.authenticated_at,
-      expires_at: req.session.expires_at
-    }
-  })
-})
+app.get('/profile', async (req, res) => {})
 
 resources.forEach(router(app))
 
