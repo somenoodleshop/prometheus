@@ -139,6 +139,8 @@ services:
       - 'traefik.http.routers.whoami-private.service=whoami-private'
       - 'traefik.http.routers.whoami-private.middlewares=oathkeeper'
       - 'traefik.http.services.whoami-private.loadbalancer.server.port=80'
+    networks:
+      - intranet
   whoami-public:
     image: traefik/whoami
     labels:
@@ -150,6 +152,8 @@ services:
       - 'traefik.http.services.whoami-public.loadbalancer.server.port=80'
       - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.regex=^.*$'
       - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.replacement=http://kratos-ui.intranet'
+    networks:
+      - intranet
   mailslurper:
     image: oryd/mailslurper:latest-smtps
     networks:
