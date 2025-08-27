@@ -87,9 +87,9 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos-ui.entrypoints=web'
-      - 'traefik.http.routers.kratos-ui.rule=Host(`kratos-ui.intranet)'
+      - 'traefik.http.routers.kratos-ui.rule=Host(`kratos-ui.intranet`)'
       - 'traefik.http.routers.kratos-ui.service=kratos-ui'
-      - 'traefik.http.services.kratos-ui.loadbalancer.server.port=4435'
+      - 'traefik.http.services.kratos-ui.loadbalancer.server.port=4433'
     networks:
       - intranet
     restart: on-failure
@@ -107,6 +107,17 @@ services:
       - type: bind
         source: ./config/kratos
         target: /etc/config/kratos
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.kratos.entrypoints=web'
+      - 'traefik.http.routers.kratos.rule=Host(`kratos.intranet`)'
+      - 'traefik.http.routers.kratos.service=kratos'
+      - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
+
+      - 'traefik.http.routers.kratos-admin.entrypoints=web'
+      - 'traefik.http.routers.kratos-admin.rule=Host(`kratos-admin.intranet`)'
+      - 'traefik.http.routers.kratos-admin.service=kratos-admin'
+      - 'traefik.http.services.kratos-admin.loadbalancer.server.port=4456'
     networks:
       - intranet
   mailslurper:
