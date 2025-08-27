@@ -130,6 +130,26 @@ services:
       - 'traefik.http.services.kratos-admin.loadbalancer.server.port=4456'
     networks:
       - intranet
+  whoami-private:
+    image: traefik/whoami
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami-private.entrypoints=web'
+      - 'traefik.http.routers.whoami-private.rule=Host(`whoami-private.intranet`)'
+      - 'traefik.http.routers.whoami-private.service=whoami-private'
+      - 'traefik.http.routers.whoami-private.middlewares=oathkeeper'
+      - 'traefik.http.services.whoami-private.loadbalancer.server.port=80'
+  whoami-public:
+    image: traefik/whoami
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.whoami-public.entrypoints=web'
+      - 'traefik.http.routers.whoami-public.rule=Host(`whoami-public.intranet`)'
+      - 'traefik.http.routers.whoami-public.service=whoami-public'
+      - 'traefik.http.routers.whoami-public.middlewares=redirect-to-selfservice'
+      - 'traefik.http.services.whoami-public.loadbalancer.server.port=80'
+      - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.regex=^.*$'
+      - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.replacement=http://kratos-ui.intranet'
   mailslurper:
     image: oryd/mailslurper:latest-smtps
     networks:
