@@ -134,8 +134,5 @@ services:
   mailslurper:
     image: oryd/mailslurper:latest-smtps
 
-networks:
-  intranet:
-
 volumes:
   kratos-db: 
