@@ -31,7 +31,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.oathkeeper.entrypoints=web'
-      - 'traefik.http.routers.oathkeeper.rule=Host(`oathkeeper.intranet`)'
+      - 'traefik.http.routers.oathkeeper.rule=Host(`oathkeeper`)'
       - 'traefik.http.routers.oathkeeper.service=oathkeeper'
       - 'traefik.http.services.oathkeeper.loadbalancer.server.port=4456'
     restart: unless-stopped
@@ -64,7 +64,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.prometheus.entrypoints=web'
-      - 'traefik.http.routers.prometheus.rule=Host(`prometheus.intranet`) && PathPrefix(`/api/v1/`)'
+      - 'traefik.http.routers.prometheus.rule=Host(`prometheus`) && PathPrefix(`/api/v1/`)'
       - 'traefik.http.routers.prometheus.service=prometheus'
       - 'traefik.http.services.prometheus.loadbalancer.server.port=8000'
 
@@ -87,7 +87,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos-ui.entrypoints=web'
-      - 'traefik.http.routers.kratos-ui.rule=Host(`kratos-ui.intranet`) && PathPrefix(`/selfservice/`)'
+      - 'traefik.http.routers.kratos-ui.rule=Host(`kratos-ui`) && PathPrefix(`/selfservice/`)'
       - 'traefik.http.routers.kratos-ui.service=kratos-ui'
       - 'traefik.http.services.kratos-ui.loadbalancer.server.port=4433'
     restart: on-failure
@@ -108,7 +108,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos.entrypoints=web'
-      - 'traefik.http.routers.kratos.rule=Host(`kratos.intranet`)'
+      - 'traefik.http.routers.kratos.rule=Host(`kratos`)'
       - 'traefik.http.routers.kratos.service=kratos'
       - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
   whoami-private:
@@ -116,7 +116,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.whoami-private.entrypoints=web'
-      - 'traefik.http.routers.whoami-private.rule=Host(`whoami-private.intranet`)'
+      - 'traefik.http.routers.whoami-private.rule=Host(`whoami-private`)'
       - 'traefik.http.routers.whoami-private.service=whoami-private'
       - 'traefik.http.routers.whoami-private.middlewares=oathkeeper'
       - 'traefik.http.services.whoami-private.loadbalancer.server.port=80'
@@ -125,12 +125,12 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.whoami-public.entrypoints=web'
-      - 'traefik.http.routers.whoami-public.rule=Host(`whoami-public.intranet`)'
+      - 'traefik.http.routers.whoami-public.rule=Host(`whoami-public`)'
       - 'traefik.http.routers.whoami-public.service=whoami-public'
       - 'traefik.http.routers.whoami-public.middlewares=redirect-to-selfservice'
       - 'traefik.http.services.whoami-public.loadbalancer.server.port=80'
       - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.regex=^.*$'
-      - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.replacement=http://kratos-ui.intranet'
+      - 'traefik.http.middlewares.redirect-to-selfservice.redirectregex.replacement=http://kratos-ui'
   mailslurper:
     image: oryd/mailslurper:latest-smtps
 
