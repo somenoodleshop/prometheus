@@ -111,11 +111,6 @@ services:
       - 'traefik.http.routers.kratos.rule=Host(`kratos.intranet`)'
       - 'traefik.http.routers.kratos.service=kratos'
       - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
-
-      - 'traefik.http.routers.kratos-admin.entrypoints=web'
-      - 'traefik.http.routers.kratos-admin.rule=Host(`kratos-admin.intranet`)'
-      - 'traefik.http.routers.kratos-admin.service=kratos-admin'
-      - 'traefik.http.services.kratos-admin.loadbalancer.server.port=4456'
   whoami-private:
     image: traefik/whoami
     labels:
