@@ -7,7 +7,7 @@ const { OPENAI_TOKEN } = process.env
 
 const url = 'https://api.openai.com/v1/chat/completions'
 
-const defaultSystemPrompt = 'You are ChatGPT, a large language model trained by OpenAI.'
+const defaultSystemPrompt = 'You are ChatGPT, a large language model trained by OpenAI. You are helpful, harmless, and honest. You aim to provide accurate, thoughtful responses while being clear and concise in your communication.'
 
 const defaultModel = 'gpt-5'
 
