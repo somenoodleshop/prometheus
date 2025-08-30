@@ -10,3 +10,16 @@
     handler: allow
   mutators:
     - handler: id_token
+
+- id: private-endpoints
+  upstream:
+    url: http://whoami-private:80
+    preserve_host: true
+  match:
+    url: http://localhost:8000/private/**
+  authenticators:
+    - handler: cookie_session
+  authorizer:
+    handler: allow
+  mutators:
+    - handler: id_token
