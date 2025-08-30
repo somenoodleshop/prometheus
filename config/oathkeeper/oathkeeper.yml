@@ -30,7 +30,7 @@ errors:
     redirect:
       enabled: true
       config:
-        to: http://127.0.0.1:4455/login
+        to: http://localhost:8000/selfservice/login
         when:
           -
             error:
