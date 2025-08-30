@@ -78,7 +78,7 @@ services:
     image: oryd/kratos-selfservice-ui-node:v1.3.1
     environment:
       - KRATOS_PUBLIC_URL=http://kratos:4433/
-      - KRATOS_BROWSER_URL=http://127.0.0.1:8000/
+      - KRATOS_BROWSER_URL=http://localhost:4455/.ory/kratos
       - COOKIE_SECRET=changeme
       - CSRF_COOKIE_NAME=ory_csrf_ui
       - CSRF_COOKIE_SECRET=changeme
@@ -108,7 +108,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos.entrypoints=web'
-      - 'traefik.http.routers.kratos.rule=Host(`kratos`)'
+      - 'traefik.http.routers.kratos.rule=Host(`kratos`) && PathPrefix(`/.ory/kratos/`)'
       - 'traefik.http.routers.kratos.service=kratos'
       - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
   whoami-public:
