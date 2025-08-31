@@ -3,7 +3,7 @@
     url: http://prometheus:80
     preserve_host: true
   match:
-    url: http://prometheus.intranet/**
+    url: http://localhost:8000/api/v1/**
   authenticators:
     - handler: cookie_session
   authorizer:
