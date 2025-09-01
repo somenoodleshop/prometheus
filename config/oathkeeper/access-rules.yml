@@ -11,12 +11,12 @@
   mutators:
     - handler: id_token
 
-- id: private-endpoints
+- id: whoami-private
   upstream:
     url: http://whoami-private:80
     preserve_host: true
   match:
-    url: http://localhost:8000/private/**
+    url: http://localhost:8000/private
   authenticators:
     - handler: cookie_session
   authorizer:
