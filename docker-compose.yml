@@ -64,16 +64,12 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.prometheus.entrypoints=web'
-      - 'traefik.http.routers.prometheus.rule=Host(`prometheus`) && PathPrefix(`/api/v1/`)'
+      # - 'traefik.http.routers.prometheus.rule=Host(`prometheus`) && PathPrefix(`/api/v1/`)'
+      - 'traefik.http.routers.kratos-ui.rule=PathPrefix(`/api/v1/`)'
       - 'traefik.http.routers.prometheus.service=prometheus'
       - 'traefik.http.services.prometheus.loadbalancer.server.port=80'
 
       - 'traefik.http.routers.prometheus.middlewares=oathkeeper'
-
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.address=http://oathkeeper:4456/decisions'
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.trustForwardHeader=true'
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=X-User-ID,Authorization'
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.authRequestHeaders=Cookie,Authorization'
   kratos-selfservice-ui-node:
     image: oryd/kratos-selfservice-ui-node:v1.3.1
     environment:
