@@ -57,6 +57,9 @@ services:
     depends_on:
       - kratos-migrate
     image: oryd/kratos:v1.3.1
+    ports:
+      - '4433:4433' # public
+      - '4434:4434' # admin
     restart: unless-stopped
     environment:
       - SERVE_PUBLIC_BASE_URL=http://kratos:4455/.ory/kratos/public
@@ -71,7 +74,7 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos.entrypoints=web'
       - 'traefik.http.routers.kratos.rule=PathPrefix(`/.ory/kratos/`)'
-      - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
+      - 'traefik.http.services.kratos.loadbalancer.server.port=4433,4434'
   whoami-public:
     image: traefik/whoami
     labels:
