@@ -36,19 +36,6 @@ services:
       - POSTGRES_USER=kratos
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=kratos
-  prometheus:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    env_file:
-      - .env
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.prometheus.entrypoints=web'
-      - 'traefik.http.routers.prometheus.rule=Host(`prometheus`) && PathPrefix(`/api/v1/`)'
-      - 'traefik.http.routers.prometheus.service=prometheus'
-      - 'traefik.http.services.prometheus.loadbalancer.server.port=80'
   kratos-selfservice-ui-node:
     image: oryd/kratos-selfservice-ui-node:v1.3.1
     environment:
@@ -57,7 +44,6 @@ services:
       - COOKIE_SECRET=changeme
       - CSRF_COOKIE_NAME=ory_csrf_ui
       - CSRF_COOKIE_SECRET=changeme
-      - PORT=4435
       - SECURITY_MODE=
     labels:
       - 'traefik.enable=true'
@@ -85,7 +71,7 @@ services:
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.kratos.entrypoints=web'
-      - 'traefik.http.routers.kratos.rule=Host(`kratos`) && PathPrefix(`/.ory/kratos/`)'
+      - 'traefik.http.routers.kratos.rule=PathPrefix(`/.ory/kratos/`)'
       - 'traefik.http.routers.kratos.service=kratos'
       - 'traefik.http.services.kratos.loadbalancer.server.port=4455'
   whoami-public:
