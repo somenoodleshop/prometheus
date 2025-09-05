@@ -49,3 +49,6 @@ services:
     restart: on-failure
     depends_on:
       - kratos-db
+
+volumes:
+  kratos-data:
