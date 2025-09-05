@@ -42,7 +42,7 @@ services:
   kratos-migrate:
     image: oryd/kratos:v1.3.1
     environment:
-      - DSN=postgres://kratos:secret@kratos-data:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+      - DSN=postgres://kratos:secret@kratos-db:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
     volumes:
       - ./config/kratos:/etc/config/kratos
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
