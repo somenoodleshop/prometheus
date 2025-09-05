@@ -2,79 +2,17 @@ services:
   traefik:
     image: traefik
     command:
-      - '--log.level=DEBUG'
       - '--api.dashboard=true'
       - '--api.insecure=true'
       - '--providers.docker=true'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:8000'
-      - '--entrypoints.websecure.address=:443'
-      - '--accesslog=true'
     ports:
-      - '443:443'
       - '8000:8000'
       - '8080:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
-  kratos-migrate:
-    image: oryd/kratos:v1.3.1
-    environment:
-      - DSN=postgres://kratos:secret@kratos-db:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
-    volumes:
-      - type: volume
-        source: kratos-db
-        target: /var/lib/postgresql/data
-      - type: bind
-        source: ./config/kratos
-        target: /etc/config/kratos
-    command: migrate sql -e --yes
-    restart: on-failure
-  kratos-db:
-    image: postgres:15
-    environment:
-      - POSTGRES_USER=kratos
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=kratos
-  kratos-selfservice-ui-node:
-    image: oryd/kratos-selfservice-ui-node:v1.3.1
-    environment:
-      - KRATOS_PUBLIC_URL=http://kratos:4433/
-      - KRATOS_BROWSER_URL=http://localhost:8000/.ory/kratos
-      - COOKIE_SECRET=changeme
-      - CSRF_COOKIE_NAME=ory_csrf_ui
-      - CSRF_COOKIE_SECRET=changeme
-      - SECURITY_MODE=
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.kratos-ui.entrypoints=web'
-      - 'traefik.http.routers.kratos-ui.rule=PathPrefix(`/selfservice/`)'
-      - 'traefik.http.services.kratos-ui.loadbalancer.server.port=4435'
-      - 'traefik.http.routers.kratos-ui.middlewares=strip-selfservice'
-      - 'traefik.http.middlewares.strip-selfservice.stripprefix.prefixes=/selfservice'
-    restart: on-failure
-  kratos:
-    depends_on:
-      - kratos-migrate
-    image: oryd/kratos:v1.3.1
-    ports:
-      - '4433:4433' # public
-      - '4434:4434' # admin
-    restart: unless-stopped
-    environment:
-      - SERVE_PUBLIC_BASE_URL=http://kratos:4455/.ory/kratos/public
-      - DSN=postgres://kratos:secret@kratos-db:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
-      - LOG_LEVEL=trace
-    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
-    volumes:
-      - type: bind
-        source: ./config/kratos
-        target: /etc/config/kratos
-    labels:
-      - 'traefik.enable=true'
-      - 'traefik.http.routers.kratos.entrypoints=web'
-      - 'traefik.http.routers.kratos.rule=PathPrefix(`/.ory/kratos/`)'
-      - 'traefik.http.services.kratos.loadbalancer.server.port=4433,4434'
   whoami-public:
     image: traefik/whoami
     labels:
@@ -90,11 +28,24 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.whoami-private.entrypoints=web'
       - 'traefik.http.routers.whoami-private.rule=PathPrefix(`/private`)'
-      - 'traefik.http.services.whoami-private.loadbalancer.server.port=80'
       - 'traefik.http.routers.whoami-private.middlewares=strip-private'
       - 'traefik.http.middlewares.strip-private.stripprefix.prefixes=/private'
-  mailslurper:
-    image: oryd/mailslurper:latest-smtps
-
-volumes:
-  kratos-db: 
+  kratos-db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=kratos
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=kratos
+    volumes:
+      - kratos-data:/var/lib/postgresql/data
+    restart: unless-stopped
+  kratos-migrate:
+    image: oryd/kratos:v1.3.1
+    environment:
+      - DSN=postgres://kratos:secret@kratos-data:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    volumes:
+      - ./config/kratos:/etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+    restart: on-failure
+    depends_on:
+      - kratos-db
