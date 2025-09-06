@@ -59,13 +59,21 @@ services:
     volumes:
       - ./config/kratos:/etc/config/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.kratos.entrypoints=web'
+      - 'traefik.http.routers.kratos.rule=PathPrefix(`/kratos`)'
+      - 'traefik.http.services.kratos.loadbalancer.server.port=4433'
+      - 'traefik.http.routers.kratos.middlewares=strip-kratos'
+      - 'traefik.http.middlewares.strip-kratos.stripprefix.prefixes=/kratos'
     restart: unless-stopped
     depends_on:
       - kratos-migrate
   kratos-ui:
     image: oryd/kratos-selfservice-ui-node:v1.3.1
     environment:
-      - KRATOS_PUBLIC_URL=http://kratos:4433/
+      # - KRATOS_PUBLIC_URL=http://kratos:4433/
+      - KRATOS_PUBLIC_URL=http://127.0.0.1:8000/kratos
       - KRATOS_BROWSER_URL=http://localhost:8000/selfservice
       - PORT=4435
       - COOKIE_SECRET=changeme

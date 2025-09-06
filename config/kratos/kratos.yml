@@ -2,7 +2,8 @@ version: v0.13.0
 
 serve:
   public:
-    base_url: http://127.0.0.1:4433/
+    # base_url: http://127.0.0.1:4433/
+    base_url: http://127.0.0.1:8000/kratos
     cors:
       enabled: true
   admin:
@@ -52,15 +53,17 @@ selfservice:
 
     logout:
       after:
-        default_browser_return_url: http://127.0.0.1:8000/login
+        default_browser_return_url: http://127.0.0.1:8000/selfservice/login
 
     login:
-      ui_url: http://127.0.0.1:8000/login
+      # ui_url: http://127.0.0.1:8000/login
+      ui_url: http://127.0.0.1:8000/selfservice/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      ui_url: http://127.0.0.1:8000/registration
+      # ui_url: http://127.0.0.1:8000/registration
+      ui_url: http://127.0.0.1:8000/selfservice/registration
       after:
         oidc:
           hooks:
