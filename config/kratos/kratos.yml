@@ -2,18 +2,16 @@ version: v0.13.0
 
 serve:
   public:
-    # base_url: http://127.0.0.1:4433/
-    base_url: http://127.0.0.1:8000/kratos
+    base_url: http://localhost:8000/kratos/
     cors:
       enabled: true
   admin:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://127.0.0.1:8000/welcome
+  default_browser_return_url: http://localhost:8000/selfservice/welcome
   allowed_return_urls:
-    - http://127.0.0.1:8000
-    - http://127.0.0.1:8000/selfservice
+    - http://localhost:8000/selfservice
     - http://localhost:19006/Callback
     - exp://localhost:8081/--/Callback
 
@@ -33,40 +31,35 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://127.0.0.1:8000/error
+      ui_url: http://localhost:8000/selfservice/error
 
     settings:
-      ui_url: http://127.0.0.1:8000/settings
+      ui_url: http://localhost:8000/selfservice/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
-      ui_url: http://127.0.0.1:8000/recovery
+      ui_url: http://localhost:8000/selfservice/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://127.0.0.1:8000/verification
+      ui_url: http://localhost:8000/selfservice/verification
       use: code
       after:
-        default_browser_return_url: http://127.0.0.1:8000/welcome
+        default_browser_return_url: http://localhost:8000/selfservice/welcome
 
     logout:
       after:
-        default_browser_return_url: http://127.0.0.1:8000/selfservice/login
+        default_browser_return_url: http://localhost:8000/selfservice/login
 
     login:
-      # ui_url: http://127.0.0.1:8000/login
-      # ui_url: http://localhost:8000/selfservice/login
-      ui_url: http://localhost:8000/login
-      # ui_url: http://127.0.0.1:8000/kratos/login
+      ui_url: http://localhost:8000/selfservice/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
-      # ui_url: http://127.0.0.1:8000/registration
-      # ui_url: http://localhost:8000/selfservice/registration
-      ui_url: http://localhost:8000/registration
+      ui_url: http://localhost:8000/selfservice/registration
       after:
         oidc:
           hooks:
