@@ -46,7 +46,7 @@ services:
     volumes:
       - ./config/kratos:/etc/config/kratos
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - kratos-db
   kratos:
@@ -62,6 +62,24 @@ services:
     restart: unless-stopped
     depends_on:
       - kratos-migrate
-
+  kratos-ui:
+    image: oryd/kratos-selfservice-ui-node:v1.3.1
+    environment:
+      - KRATOS_PUBLIC_URL=http://kratos:4433/
+      - KRATOS_BROWSER_URL=http://localhost:8000/selfservice
+      - PORT=4435
+      - COOKIE_SECRET=changeme
+      - CSRF_COOKIE_NAME=ory_csrf_ui
+      - CSRF_COOKIE_SECRET=changeme
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.kratos-ui.entrypoints=web'
+      - 'traefik.http.routers.kratos-ui.rule=PathPrefix(`/selfservice/`)'
+      - 'traefik.http.services.kratos-ui.loadbalancer.server.port=4435'
+      - 'traefik.http.routers.kratos-ui.middlewares=strip-selfservice'
+      - 'traefik.http.middlewares.strip-selfservice.stripprefix.prefixes=/selfservice'
+    restart: unless-stopped
+    depends_on:
+      - kratos
 volumes:
   kratos-data:
