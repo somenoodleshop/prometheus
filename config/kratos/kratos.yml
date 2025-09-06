@@ -57,13 +57,16 @@ selfservice:
 
     login:
       # ui_url: http://127.0.0.1:8000/login
-      ui_url: http://127.0.0.1:8000/selfservice/login
+      # ui_url: http://localhost:8000/selfservice/login
+      ui_url: http://localhost:8000/login
+      # ui_url: http://127.0.0.1:8000/kratos/login
       lifespan: 10m
 
     registration:
       lifespan: 10m
       # ui_url: http://127.0.0.1:8000/registration
-      ui_url: http://127.0.0.1:8000/selfservice/registration
+      # ui_url: http://localhost:8000/selfservice/registration
+      ui_url: http://localhost:8000/registration
       after:
         oidc:
           hooks:
