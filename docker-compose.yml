@@ -30,6 +30,11 @@ services:
       - 'traefik.http.routers.whoami-private.rule=PathPrefix(`/private`)'
       - 'traefik.http.routers.whoami-private.middlewares=strip-private'
       - 'traefik.http.middlewares.strip-private.stripprefix.prefixes=/private'
+
+      - 'traefik.http.middlewares.kratos-auth.forwardauth.address=http://kratos:4433/sessions/whoami'
+      - 'traefik.http.middlewares.kratos-auth.forwardauth.trustForwardHeader=true'
+      - 'traefik.http.middlewares.kratos-auth.forwardauth.authResponseHeaders=X-Session-Token,X-Session-ID'
+      - 'traefik.http.routers.whoami-private.middlewares=kratos-auth@docker'
   kratos-db:
     image: postgres:15
     environment:
