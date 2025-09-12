@@ -34,7 +34,13 @@ services:
       - 'traefik.http.middlewares.kratos-auth.forwardauth.address=http://kratos:4433/sessions/whoami'
       - 'traefik.http.middlewares.kratos-auth.forwardauth.trustForwardHeader=true'
       - 'traefik.http.middlewares.kratos-auth.forwardauth.authResponseHeaders=X-Session-Token,X-Session-ID'
-      - 'traefik.http.routers.whoami-private.middlewares=kratos-auth@docker'
+
+      - 'traefik.http.middlewares.redirect-to-kratos.redirectregex.regex=^.*$'
+      - 'traefik.http.middlewares.redirect-to-kratos.redirectregex.replacement=/login'
+      - 'traefik.http.middlewares.redirect-to-kratos.redirectregex.permanent=false'
+
+      - 'traefik.http.routers.whoami-private.middlewares=kratos-auth@docker,redirect-to-login@docker'
+      # - 'traefik.http.routers.whoami-private.middlewares=kratos-auth@docker'
   kratos-db:
     image: postgres:15
     environment:
