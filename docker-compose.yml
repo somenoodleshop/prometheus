@@ -7,6 +7,8 @@ services:
       - '--providers.docker=true'
       - '--providers.docker.exposedbydefault=false'
       - '--entrypoints.web.address=:8000'
+      - '--entrypoints.web.http.redirections.entryPoint=websecure'
+      - '--entrypoints.web.http.redirections.entryPoint.scheme=https'
     ports:
       - '8000:8000'
       - '8080:8080'
