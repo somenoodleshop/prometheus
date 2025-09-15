@@ -28,6 +28,13 @@ const tool = {
 }
 
 export default {
+  session: async (messages) => {
+    const response = await client.messages.create({
+      model: defaultModel,
+      messages: [{ role: 'system', content: defaultSystemPrompt }, ...messages]
+    })
+    return response.content[0].text
+  },
   query: async (messages, systemPrompt = defaultSystemPrompt) => {
     const response = await client.messages.create({
       model: defaultModel,
@@ -35,6 +42,5 @@ export default {
     })
     return response.content[0].text
   },
-  session: async (messages) => { throw new Error('Not implemented') },
   stream: async messages => { throw new Error('Not implemented') }
 }
