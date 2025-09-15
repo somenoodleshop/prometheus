@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 
 import request from './request.js'
-import { newSession } from './responseFormat.js'
+import { openAISession } from './responseFormat.js'
 
 const { OPENAI_TOKEN } = process.env
 
@@ -29,7 +29,7 @@ export default {
   session: query => {
     const systemPrompt = `${defaultSystemPrompt} Respond to the user's input and also provide a suitable title for the conversation.`
     const payload = [{ role: 'system', content: systemPrompt }, ...query]
-    return request.post(url, { ...body(defaultModel, payload), response_format: newSession }, authorization(OPENAI_TOKEN))
+    return request.post(url, { ...body(defaultModel, payload), response_format: openAISession }, authorization(OPENAI_TOKEN))
       .then(({ choices = [] }) => {
         const [{ message = '' }] = choices
         const content = JSON.parse(message.content)

@@ -1,4 +1,4 @@
-export const newSession = {
+export const openAISession  = {
   type: 'json_schema',
   json_schema: {
     name: 'new_session',
