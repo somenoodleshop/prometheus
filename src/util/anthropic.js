@@ -28,10 +28,12 @@ const tool = {
 }
 
 export default {
-  session: async (messages) => {
+  session: async (messages, systemPrompt = defaultSystemPrompt) => {
     const response = await client.messages.create({
       model: defaultModel,
-      messages: [{ role: 'system', content: defaultSystemPrompt }, ...messages]
+      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      tools: [tool],
+      tool_choice: { type: 'tool', name: 'format_response' }
     })
     return response.content[0].text
   },
