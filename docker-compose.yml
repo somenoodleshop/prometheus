@@ -49,6 +49,8 @@ services:
       - 'traefik.http.routers.prometheus.rule=PathPrefix(`/api/v1/`)'
       - 'traefik.http.routers.prometheus.service=prometheus'
       - 'traefik.http.services.prometheus.loadbalancer.server.port=80'
+      - 'traefik.http.routers.prometheus.middlewares=strip-path'
+      - 'traefik.http.middlewares.strip-path.stripprefix.prefixes=/api/v1/'
   kratos-db:
     image: postgres:15
     environment:
