@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS sessions (
+  id UUID DEFAULT uuidv7() PRIMARY KEY,
+  user_id VARCHAR(255) NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+  id UUID DEFAULT uuidv7() PRIMARY KEY,
+  session_id UUID NOT NULL REFERENCES sessions(id),
+  content TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
