@@ -13,6 +13,17 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+  oathkeeper:
+    image: oryd/oathkeeper:v0.40.9
+    volumes:
+      - ./config/oathkeeper:/etc/config/oathkeeper
+    command: serve -c /etc/config/oathkeeper/oathkeeper.yml
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.oathkeeper.entrypoints=web'
+      - 'traefik.http.routers.oathkeeper.rule=PathPrefix(`/oathkeeper`)'
+      - 'traefik.http.services.oathkeeper.loadbalancer.server.port=4456'
+    restart: unless-stopped
   whoami-public:
     image: traefik/whoami
     labels:
