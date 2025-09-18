@@ -4,6 +4,12 @@
     preserve_host: true
   match:
     url: http://localhost:8000/api/v1/**
+    methods:
+      - GET
+      - POST
+      - DELETE
+      - PUT
+      - PATCH
   authenticators:
     - handler: cookie_session
   authorizer:
