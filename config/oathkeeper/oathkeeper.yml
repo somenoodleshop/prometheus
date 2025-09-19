@@ -26,6 +26,10 @@ access_rules:
     - file:///etc/config/oathkeeper/access-rules.yml
 
 authenticators:
+  anonymous:
+    enabled: true
+    config:
+      subject: guest
   cookie_session:
     enabled: true
     config:
