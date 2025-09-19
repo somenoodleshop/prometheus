@@ -25,9 +25,12 @@
     url: http://localhost:8000/private
     methods:
       - GET
+      - POST
   authenticators:
     - handler: cookie_session
   authorizer:
     - handler: allow
   mutators:
-    - handler: cookie_session
+    - handler: noop
+  errors:
+    - handler: redirect
