@@ -2,23 +2,23 @@ serve:
   proxy:
     cors:
       enabled: true
-    allowed_origins:
-      - '*'
-    allowed_methods:
-      - POST
-      - GET
-      - PUT
-      - DELETE
-      - PATCH
-    allowed_headers:
-      - Authorization
-      - Cookie
-      - Content-Type
-    exposed_headers:
-      - Content-Type
-      - Set-Cookie
-    allow_credentials: true
-    debug: true
+      allowed_origins:
+        - '*'
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - DELETE
+        - PATCH
+      allowed_headers:
+        - Authorization
+        - Cookie
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+        - Set-Cookie
+      allow_credentials: true
+      debug: true
 
 access_rules:
   matching_strategy: glob
