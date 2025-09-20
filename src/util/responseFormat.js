@@ -6,9 +6,9 @@ export const openAISession  = {
       type: 'object',
       properties: {
         title: { type: 'string' },
-        response: { type: 'string' }
+        message: { type: 'string' }
       },
-      required: ['title', 'response'],
+      required: ['title', 'message'],
       additionalProperties: false
     },
     strict: true
@@ -21,15 +21,9 @@ export const anthropicSession = {
   input_schema: {
     type: 'object',
     properties: {
-      title: {
-        type: 'string',
-        description: 'A concise title for the conversation'
-      },
-      response: {
-        type: 'string',
-        description: 'The actual response to the user'
-      }
+      title: { type: 'string' },
+      message: { type: 'string' }
     },
-    required: ['title', 'response']
+    required: ['title', 'message']
   }
 }
