@@ -8,7 +8,7 @@ const client = new Anthropic({ apiKey: ANTHROPIC_TOKEN })
 
 const defaultSystemPrompt = 'You are Claude, an AI assistant created by Anthropic. You are helpful, harmless, and honest. You aim to provide accurate, thoughtful responses while being clear and concise in your communication.'
 
-const defaultModel = 'claude-opus-4-0'
+const defaultModel = 'claude-sonnet-4-20250514'
 
 export default {
   session: async (messages, systemPrompt = defaultSystemPrompt) => {
