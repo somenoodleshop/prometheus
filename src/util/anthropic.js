@@ -14,11 +14,16 @@ export default {
   session: async (messages, systemPrompt = defaultSystemPrompt) => {
     const response = await client.messages.create({
       model: defaultModel,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages,
       tools: [anthropicSession],
       tool_choice: { type: 'tool', name: 'format_response' }
     })
-    return response.content[0].text
+
+    const { content = [] } = response
+    const [{ input } = {}] = content
+    return input
   },
   query: async (messages, systemPrompt = defaultSystemPrompt) => {
     const response = await client.messages.create({
