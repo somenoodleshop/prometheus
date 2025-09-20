@@ -15,7 +15,7 @@ const query = ({ body: { messages, provider = 'openai' } }, res, next) =>
     ? next({ status: 400, message: 'Messages are required' })
     : !providers[provider]
       ? next({ status: 400, message: 'Invalid provider' })
-      : providers[provider][messages.length > 1 ? 'query' : 'session'](messages)
+      : providers[provider][messages.length > 2 ? 'query' : 'session'](messages)
           .then(({ message }) => res.json({ response: message.content }))
           .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
