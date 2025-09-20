@@ -16,7 +16,7 @@ const query = ({ body: { messages, provider = 'openai' } }, res, next) =>
     : !providers[provider]
       ? next({ status: 400, message: 'Invalid provider' })
       : providers[provider][messages.length > 2 ? 'query' : 'session'](messages)
-          .then(({ message }) => res.json({ response: message.content }))
+          .then(({ title = '', message }) => res.json({ ...(title ? { title } : {}), response: message.content }))
           .catch(() => next({ status: 500, message: 'Failed to process chat request' }))
 
 const stream = async ({ body: { messages, provider = 'openai' } }, res, next) => {

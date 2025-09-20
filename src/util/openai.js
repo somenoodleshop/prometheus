@@ -27,8 +27,8 @@ export default {
     }
   },
   session: (query, systemPrompt = defaultSystemPrompt) => {
-    const systemPrompt = `${defaultSystemPrompt} Respond to the user's input and also provide a suitable title for the conversation.`
-    const payload = [{ role: 'system', content: systemPrompt }, ...query]
+    const prompt = `${systemPrompt} Respond to the user's input and also provide a suitable title for the conversation.`
+    const payload = [{ role: 'system', content: prompt }, ...query]
     return request.post(url, { ...body(defaultModel, payload), response_format: openAISession }, authorization(OPENAI_TOKEN))
       .then(({ choices = [] }) => {
         const [{ message = '' }] = choices
