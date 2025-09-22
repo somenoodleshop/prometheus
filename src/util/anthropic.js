@@ -28,9 +28,13 @@ export default {
   query: async (messages, systemPrompt = defaultSystemPrompt) => {
     const response = await client.messages.create({
       model: defaultModel,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages]
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages
     })
-    return response.content[0].text
+    const { content = [] } = response
+    const [{ text = '' } = {}] = content
+    return text
   },
   stream: async messages => { throw new Error('Not implemented') }
 }
