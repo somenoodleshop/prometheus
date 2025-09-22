@@ -34,7 +34,7 @@ export default {
     })
     const { content = [] } = response
     const [{ text = '' } = {}] = content
-    return text
+    return { message: text }
   },
   stream: async messages => { throw new Error('Not implemented') }
 }
