@@ -36,5 +36,14 @@ export default {
     const [{ text = '' } = {}] = content
     return { message: text }
   },
-  stream: async messages => { throw new Error('Not implemented') }
+  stream: async messages => {
+    const stream = await client.messages.create({
+      model: defaultModel,
+      max_tokens: 4096,
+      system: systemPrompt,
+      messages,
+      stream: true
+    })
+    return stream
+  }
 }
