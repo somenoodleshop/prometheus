@@ -44,7 +44,7 @@ services:
 
       - 'traefik.http.middlewares.oathkeeper.forwardauth.address=http://oathkeeper:4456/decisions'
       - 'traefik.http.middlewares.oathkeeper.forwardauth.trustForwardHeader=true'
-      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=X-Session-Token,X-Session-ID'
+      - 'traefik.http.middlewares.oathkeeper.forwardauth.authResponseHeaders=X-Session-ID,X-User'
 
       - 'traefik.http.routers.whoami-private.middlewares=oathkeeper@docker'
   prometheus:
