@@ -35,14 +35,15 @@ export default {
         const content = JSON.parse(message.content)
         return {
           title: content.title,
-          message: { role: message.role, content: content.response }
+          message: content.message,
         }
       })
   },
   query: messages => request.post(url, body(defaultModel, [{ role: 'system', content: defaultSystemPrompt }, ...messages]), authorization(OPENAI_TOKEN))
     .then(({ choices = [] }) => {
       const [{ message = '' }] = choices
-      return { message }
+      const { content = '' } = message
+      return { message: content }
     })
     .catch(() => alert('Request broken')),
   stream: async messages => {
