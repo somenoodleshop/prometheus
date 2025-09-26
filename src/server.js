@@ -25,13 +25,13 @@ app.get('/', (req, res) => { res.json({ message: 'Welcome to the API' }) })
 app.get('/protected', (req, res) => {
   const sessionToken = req.headers.get('X-Session-Token')
   const user = req.headers.get('X-User')
-  if (!userID || !sessionToken) {
+  if (!sessionToken || !user) {
     return res.status(401).json({ message: 'Unauthorized' })
   }
   res.json({
     message: 'This is a protected endpoint',
-    userID,
-    sessionToken
+    sessionToken,
+    user
   })
 })
 
