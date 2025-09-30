@@ -3,13 +3,6 @@ import anthropic from '../util/anthropic.js'
 
 const providers = { openai, anthropic }
 
-export const verifyToken = (req, res, next) =>
-  !req.body.token
-    ? next({ status: 400, message: 'Token is required' })
-    : openai.isValidToken(req.body.token)
-        .then(isValid => isValid ? next() : next({ status: 401, message: 'Invalid token' }))
-        .catch(() => next({ status: 500, message: 'Failed to validate token' }))
-
 const query = ({ body: { messages, provider = 'openai' } }, res, next) =>
   !messages
     ? next({ status: 400, message: 'Messages are required' })
