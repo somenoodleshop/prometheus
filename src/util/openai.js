@@ -51,10 +51,7 @@ const stream = async messages => {
   const client = new OpenAI({ apiKey: OPENAI_TOKEN })
   const stream = await client.chat.completions.create({
     model: defaultModel,
-    messages: [
-      { role: 'system', content: defaultSystemPrompt },
-      ...messages
-    ],
+    messages: [{ role: 'system', content: defaultSystemPrompt }, ...messages],
     stream: true
   })
   return stream
